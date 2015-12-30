@@ -16,6 +16,7 @@ import java.util.List;
  * Created by adil on 12/29/15.
  */
 public class ListStoryAdapter extends ArrayAdapter<ToDo> {
+
     public ListStoryAdapter(Context context, int textViewResourceId) {
         super(context, textViewResourceId);
     }
@@ -30,29 +31,20 @@ public class ListStoryAdapter extends ArrayAdapter<ToDo> {
         View v = convertView;
 
         if (v == null) {
-            LayoutInflater vi;
-            vi = LayoutInflater.from(getContext());
+            LayoutInflater vi = LayoutInflater.from(getContext());
             v = vi.inflate(R.layout.list_story_view, null);
         }
 
-        ToDo p = getItem(position);
+        ToDo td = getItem(position);
 
-        if (p != null) {
+        if (td != null) {
             TextView tvPriority = (TextView) v.findViewById(R.id.priority);
             TextView tvItemText = (TextView) v.findViewById(R.id.item_text);
             TextView tvDueDate = (TextView) v.findViewById(R.id.due_date);
 
-            if (tvPriority != null) {
-                tvPriority.setText(p.getPriority().getPriorityString());
-            }
-
-            if (tvItemText != null) {
-                tvItemText.setText(p.getText());
-            }
-
-            if (tvDueDate != null) {
-                tvDueDate.setText(DateHelper.getDateAsString(p.getDueDate()));
-            }
+            tvPriority.setText(td.getPriority().getPriorityString());
+            tvItemText.setText(td.getText());
+            tvDueDate.setText(DateHelper.getDateAsString(td.getDueDate()));
         }
 
         return v;

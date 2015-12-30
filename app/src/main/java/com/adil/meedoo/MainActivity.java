@@ -68,14 +68,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void readItems(){
-//        File filesDir = getFilesDir();
-//        File file = new File(filesDir, "todo.txt");
         Log.e(LOG, "reading items from db");
-//        todoItems = new ArrayList<String>();
         try {
-//            for (ToDo td: db.getAllToDos()){
-//                todoItems.add(td.toString());
-//            }
             todoItems = db.getAllToDos();
         } catch (ParseException e) {
             e.printStackTrace();

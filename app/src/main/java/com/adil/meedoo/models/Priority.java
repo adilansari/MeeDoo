@@ -9,23 +9,30 @@ import java.util.Map;
  */
 
 public enum Priority {
-    LOW(1),
-    MEDIUM(2),
-    HIGH(3);
+    LOW(1, "LOW"),
+    MEDIUM(2, "MEDIUM"),
+    HIGH(3, "HIGH");
 
     private int priorityCode;
+    private String priorityString;
+
     private static final Map<Integer, Priority> lookup = new HashMap<Integer, Priority>();
     static {
         for(Priority p: EnumSet.allOf(Priority.class))
             lookup.put(p.getPriorityCode(), p);
     }
 
-    Priority(int priorityCode){
+    Priority(int priorityCode, String priorityString){
         this.priorityCode = priorityCode;
+        this.priorityString = priorityString;
     }
 
     public int getPriorityCode(){
         return this.priorityCode;
+    }
+
+    public String getPriorityString(){
+        return this.priorityString;
     }
 
     public static Priority getPriority(int priorityCode){

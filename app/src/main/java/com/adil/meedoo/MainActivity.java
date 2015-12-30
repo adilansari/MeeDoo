@@ -5,7 +5,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 
@@ -18,13 +17,13 @@ import org.apache.commons.io.FileUtils;
 import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    ArrayList<String> todoItems;
-    ArrayAdapter<String> todoAdapter;
+    List<ToDo> todoItems;
+    ListStoryAdapter todoAdapter;
     ListView lvItems;
     EditText etEditText;
     DatabaseHelper db;
@@ -39,9 +38,8 @@ public class MainActivity extends AppCompatActivity {
         db = new DatabaseHelper(getApplicationContext());
 
         populateArrayItems();
-        lvItems = (ListView) findViewById(R.id.lvItems);
+        lvItems = (ListView) findViewById(R.id.list_story_view);
         lvItems.setAdapter(todoAdapter);
-        etEditText = (EditText) findViewById(R.id.etEditText);
         lvItems.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
@@ -57,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void populateArrayItems(){
         readItems();
-        todoAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, todoItems);
+        todoAdapter = new ListStoryAdapter(this, R.layout.list_story_view, todoItems);
     }
 
     public void onAddItem(View view) {
@@ -73,11 +71,12 @@ public class MainActivity extends AppCompatActivity {
 //        File filesDir = getFilesDir();
 //        File file = new File(filesDir, "todo.txt");
         Log.e(LOG, "reading items from db");
-        todoItems = new ArrayList<String>();
+//        todoItems = new ArrayList<String>();
         try {
-            for (ToDo td: db.getAllToDos()){
-                todoItems.add(td.toString());
-            }
+//            for (ToDo td: db.getAllToDos()){
+//                todoItems.add(td.toString());
+//            }
+            todoItems = db.getAllToDos();
         } catch (ParseException e) {
             e.printStackTrace();
         }

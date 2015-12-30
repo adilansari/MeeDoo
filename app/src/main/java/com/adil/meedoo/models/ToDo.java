@@ -1,5 +1,7 @@
 package com.adil.meedoo.models;
 
+import com.adil.meedoo.helpers.DateHelper;
+
 import java.util.Date;
 
 
@@ -52,5 +54,14 @@ public class ToDo {
 
     public void setPriority(Priority priority) {
         this.priority = priority;
+    }
+
+    public String toString(){
+        String str = "[id: " + Integer.toString(getId()) +
+                "text: " + getText() +
+                "due_date: " + DateHelper.getDateAsString(getDueDate()) +
+                "priority: " + getPriority().getPriorityString();
+
+        return str;
     }
 }

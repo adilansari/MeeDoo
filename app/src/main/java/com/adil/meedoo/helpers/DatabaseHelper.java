@@ -126,4 +126,33 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 
         return todos;
     }
+
+    public int updateToDo(ToDo todo) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_TEXT, todo.getText());
+        values.put(KEY_PRIORITY, todo.getPriority().getPriorityCode());
+        values.put(KEY_DUE_DATE, DateHelper.getDateAsString(todo.getDueDate()));
+
+        // updating row
+        return db.update(TABLE_TODO, values, KEY_ID + " = ?",
+                new String[] { String.valueOf(todo.getId()) });
+    }
+
+    /**
+     * Deleting a todo
+     */
+    public void deleteToDo(long todo_id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_TODO, KEY_ID + " = ?",
+                new String[] { String.valueOf(todo_id) });
+    }
+
+    // closing database
+    public void closeDB() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        if (db != null && db.isOpen())
+            db.close();
+    }
 }

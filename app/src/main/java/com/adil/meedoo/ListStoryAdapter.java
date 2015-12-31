@@ -42,7 +42,7 @@ public class ListStoryAdapter extends ArrayAdapter<ToDo> {
             TextView tvItemText = (TextView) v.findViewById(R.id.item_text);
             TextView tvDueDate = (TextView) v.findViewById(R.id.due_date);
 
-            tvPriority.setText(td.getPriority().getPriorityString());
+            tvPriority.setText(td.getPriority().toString());
             tvItemText.setText(td.getText());
             tvDueDate.setText(DateHelper.getDateAsString(td.getDueDate()));
         }

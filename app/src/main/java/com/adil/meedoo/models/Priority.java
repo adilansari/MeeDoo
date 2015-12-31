@@ -31,12 +31,12 @@ public enum Priority {
         return this.priorityCode;
     }
 
-    public String getPriorityString(){
-        return this.priorityString;
-    }
-
     public static Priority getPriority(int priorityCode){
         return lookup.get(priorityCode);
     }
 
+    @Override
+    public String toString(){
+        return this.priorityString;
+    }
 }

@@ -3,4 +3,8 @@
     <string name="priority">priority</string>
     <string name="description">description</string>
     <string name="due_date">due_date</string>
+    <string name="action_favorite">action_add</string>
+    <string name="action_add">action_add</string>
+    <string name="action_delete">action_delete</string>
+    <string name="action_save">action_save</string>
 </resources>

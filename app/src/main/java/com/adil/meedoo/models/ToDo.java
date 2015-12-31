@@ -60,7 +60,7 @@ public class ToDo {
         String str = "[id: " + Integer.toString(getId()) +
                 "text: " + getText() +
                 "due_date: " + DateHelper.getDateAsString(getDueDate()) +
-                "priority: " + getPriority().getPriorityString();
+                "priority: " + getPriority().toString();
 
         return str;
     }

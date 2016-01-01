@@ -9,32 +9,48 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.adil.meedoo.ListItemActivity">
 
-    <TextView
+    <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Item to do ..."
-        android:id="@+id/textView"
+        android:id="@+id/itemDescription"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:height="160dp" />
 
-
-
     <Spinner
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/prioritySpinner"
-        android:layout_centerHorizontal="true"
         android:layout_below="@+id/textView"
-        />
+        android:spinnerMode="dropdown"
+        android:background="#a3a3a3" />
 
-    <DatePicker
+    <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/datePicker"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Large Text"
+        android:id="@+id/dateDialog"
+        android:layout_marginTop="83dp"
+        android:onClick="onDateDialogClick"
         android:layout_below="@+id/prioritySpinner"
-        android:layout_centerHorizontal="true" />
+        android:layout_toEndOf="@+id/dueDateText"
+        android:paddingLeft="40dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Due date"
+        android:id="@+id/dueDateText"
+        android:textIsSelectable="false"
+        android:textAlignment="center"
+        android:textSize="32dp"
+        android:textColor="#000000"
+        android:layout_alignTop="@+id/dateDialog"
+        android:layout_alignParentStart="true"
+        android:layout_alignBottom="@+id/dateDialog" />
 
 
 </RelativeLayout>

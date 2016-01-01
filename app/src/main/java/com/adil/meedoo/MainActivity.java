@@ -6,21 +6,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.ListView;
 
 import com.adil.meedoo.helpers.DatabaseHelper;
-import com.adil.meedoo.models.Priority;
 import com.adil.meedoo.models.ToDo;
 
-import org.apache.commons.io.FileUtils;
-
-import java.io.File;
-import java.io.IOException;
 import java.text.ParseException;
-import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -28,7 +19,6 @@ public class MainActivity extends AppCompatActivity {
     List<ToDo> todoItems;
     ListStoryAdapter todoAdapter;
     ListView lvItems;
-    EditText etEditText;
     DatabaseHelper db;
 
     // Logcat tag
@@ -43,15 +33,6 @@ public class MainActivity extends AppCompatActivity {
         populateArrayItems();
         lvItems = (ListView) findViewById(R.id.list_story_view);
         lvItems.setAdapter(todoAdapter);
-        lvItems.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                todoItems.remove(position);
-                todoAdapter.notifyDataSetChanged();
-                writeItems();
-                return false;
-            }
-        });
 
         db.closeDB();
     }
@@ -60,6 +41,13 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_action_bar_menu, menu);
         return true;
+    }
+
+    @Override
+    public void onRestart(){
+        super.onRestart();
+        this.finish();
+        this.startActivity(getIntent());
     }
 
     public void onAddActionClick(MenuItem item) {
@@ -72,15 +60,6 @@ public class MainActivity extends AppCompatActivity {
         todoAdapter = new ListStoryAdapter(this, R.layout.list_story_view, todoItems);
     }
 
-    public void onAddItem(View view) {
-        ToDo td = new ToDo(etEditText.getText().toString(), new Date(), Priority.LOW);
-        db.createToDo(td);
-//        todoAdapter.add(etEditText.getText().toString());
-        etEditText.setText("");
-//        writeItems();
-        todoAdapter.notifyDataSetChanged();
-    }
-
     private void readItems(){
         Log.e(LOG, "reading items from db");
         try {
@@ -88,14 +67,6 @@ public class MainActivity extends AppCompatActivity {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-    }
-
-    private void writeItems(){
-        File filesDir = getFilesDir();
-        File file = new File(filesDir, "todo.txt");
-        try {
-            FileUtils.writeLines(file, todoItems);
-        } catch (IOException e) {}
     }
 
 }

@@ -49,4 +49,5 @@ public class ListStoryAdapter extends ArrayAdapter<ToDo> {
 
         return v;
     }
+
 }

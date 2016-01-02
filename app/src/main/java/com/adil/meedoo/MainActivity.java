@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.adil.meedoo.helpers.DatabaseHelper;
@@ -21,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
     ListView lvItems;
     DatabaseHelper db;
 
-    // Logcat tag
+    public static final String INTENT_EXTRA_OBJECT = "toDoObject";
     private static final String LOG = MainActivity.class.getName();
 
     @Override
@@ -33,6 +35,18 @@ public class MainActivity extends AppCompatActivity {
         populateArrayItems();
         lvItems = (ListView) findViewById(R.id.list_story_view);
         lvItems.setAdapter(todoAdapter);
+        lvItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.d(LOG, "getting to create new intent.");
+                ToDo td = (ToDo) parent.getAdapter().getItem(position);
+                Intent intent = new Intent(MainActivity.this, ListItemActivity.class);
+                Log.d(LOG, "sending intent to load current activity");
+                intent.putExtra(INTENT_EXTRA_OBJECT, td);
+                startActivity(intent);
+            }
+        });
 
         db.closeDB();
     }
@@ -61,7 +75,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void readItems(){
-        Log.e(LOG, "reading items from db");
+        Log.d(LOG, "debug reading items from db");
+        Log.e(LOG, "error reading items from db");
+        Log.i(LOG, "info reading items from db");
+        Log.v(LOG, "verbose reading items from db");
         try {
             todoItems = db.getAllToDos();
         } catch (ParseException e) {

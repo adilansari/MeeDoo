@@ -1,6 +1,7 @@
 package com.adil.meedoo;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
@@ -28,7 +29,9 @@ public class ListItemActivity extends AppCompatActivity {
     EditText dateEditText;
     DatePickerDialog dateDialog;
     EditText toDoEditText;
+    ArrayAdapter<Priority> listStoryAdapter;
     DatabaseHelper db;
+    ToDo toDoObject;
 
 
     @Override
@@ -37,8 +40,16 @@ public class ListItemActivity extends AppCompatActivity {
         setContentView(R.layout.activity_list_item);
         findViewsById();
         db = new DatabaseHelper(getApplicationContext());
-        prioritySpinner.setAdapter(new ArrayAdapter<Priority>(this, android.R.layout.simple_spinner_item, Priority.values()));
+        listStoryAdapter = new ArrayAdapter<Priority>(this, android.R.layout.simple_spinner_item, Priority.values());
+        prioritySpinner.setAdapter(listStoryAdapter);
         setDateField();
+
+        toDoObject = null;
+        Intent intent = this.getIntent();
+        if (intent.hasExtra(MainActivity.INTENT_EXTRA_OBJECT)){
+            toDoObject = (ToDo) intent.getSerializableExtra(MainActivity.INTENT_EXTRA_OBJECT);
+            loadViews(toDoObject);
+        }
     }
 
     @Override
@@ -53,6 +64,12 @@ public class ListItemActivity extends AppCompatActivity {
         dateEditText = (EditText) findViewById(R.id.dateDialog);
         dateEditText.setInputType(InputType.TYPE_NULL);
         dateEditText.requestFocus();
+    }
+
+    private void loadViews(ToDo td){
+        toDoEditText.setText(td.getText());
+        prioritySpinner.setSelection(listStoryAdapter.getPosition(td.getPriority()));
+        dateEditText.setText(DateHelper.getDateAsString(td.getDueDate()));
     }
 
     private void setDateField(){
@@ -74,14 +91,27 @@ public class ListItemActivity extends AppCompatActivity {
         Date date = DateHelper.getStringAsDate(dateEditText.getText().toString());
         Priority priority = (Priority) prioritySpinner.getSelectedItem();
 
-        ToDo td = new ToDo(text, date, priority);
-        db.createToDo(td);
+        if (toDoObject == null) {
+            toDoObject = new ToDo(text, date, priority);
+            db.createToDo(toDoObject);
+            Toast.makeText(this, "Saving todo " + toDoObject.toString(), Toast.LENGTH_LONG).show();
+        } else {
+            toDoObject.setText(text);
+            toDoObject.setDueDate(date);
+            toDoObject.setPriority(priority);
+            db.updateToDo(toDoObject);
+            Toast.makeText(this, "Updating todo " + toDoObject.toString(), Toast.LENGTH_LONG).show();
+        }
 
-        Toast.makeText(this, "Saving todo " + td.toString(), Toast.LENGTH_SHORT).show();
         this.finish();
     }
 
     public void onDeleteActionClick(MenuItem item) {
+        if (toDoObject != null){
+            db.deleteToDo(toDoObject.getId());
+        }
+
+        this.finish();
     }
 
     public void onDateDialogClick(View view) {

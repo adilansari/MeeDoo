@@ -2,10 +2,11 @@ package com.adil.meedoo.models;
 
 import com.adil.meedoo.helpers.DateHelper;
 
+import java.io.Serializable;
 import java.util.Date;
 
 
-public class ToDo {
+public class ToDo implements Serializable{
     private int id;
     private String text;
     private Date dueDate;
@@ -26,10 +27,6 @@ public class ToDo {
 
     public int getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getText() {
@@ -60,7 +57,7 @@ public class ToDo {
         String str = "[id: " + Integer.toString(getId()) +
                 "text: " + getText() +
                 "due_date: " + DateHelper.getDateAsString(getDueDate()) +
-                "priority: " + getPriority().getPriorityString();
+                "priority: " + getPriority().toString();
 
         return str;
     }

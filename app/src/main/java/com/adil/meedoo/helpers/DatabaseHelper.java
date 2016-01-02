@@ -107,7 +107,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         List<ToDo> todos = new ArrayList<ToDo>();
         String selectQuery = "SELECT  * FROM " + TABLE_TODO;
 
-        Log.e(LOG, selectQuery);
+        Log.i(LOG, selectQuery);
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery(selectQuery, null);

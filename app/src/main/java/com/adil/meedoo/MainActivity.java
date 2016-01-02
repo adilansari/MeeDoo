@@ -1,35 +1,29 @@
 package com.adil.meedoo;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ListView;
 
 import com.adil.meedoo.helpers.DatabaseHelper;
-import com.adil.meedoo.models.Priority;
 import com.adil.meedoo.models.ToDo;
 
-import org.apache.commons.io.FileUtils;
-
-import java.io.File;
-import java.io.IOException;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    ArrayList<String> todoItems;
-    ArrayAdapter<String> todoAdapter;
+    List<ToDo> todoItems;
+    ListStoryAdapter todoAdapter;
     ListView lvItems;
-    EditText etEditText;
     DatabaseHelper db;
 
-    // Logcat tag
+    public static final String INTENT_EXTRA_OBJECT = "toDoObject";
     private static final String LOG = MainActivity.class.getName();
 
     @Override
@@ -39,57 +33,57 @@ public class MainActivity extends AppCompatActivity {
         db = new DatabaseHelper(getApplicationContext());
 
         populateArrayItems();
-        lvItems = (ListView) findViewById(R.id.lvItems);
+        lvItems = (ListView) findViewById(R.id.list_story_view);
         lvItems.setAdapter(todoAdapter);
-        etEditText = (EditText) findViewById(R.id.etEditText);
-        lvItems.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        lvItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
             @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                todoItems.remove(position);
-                todoAdapter.notifyDataSetChanged();
-                writeItems();
-                return false;
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.d(LOG, "getting to create new intent.");
+                ToDo td = (ToDo) parent.getAdapter().getItem(position);
+                Intent intent = new Intent(MainActivity.this, ListItemActivity.class);
+                Log.d(LOG, "sending intent to load current activity");
+                intent.putExtra(INTENT_EXTRA_OBJECT, td);
+                startActivity(intent);
             }
         });
 
         db.closeDB();
     }
 
-    public void populateArrayItems(){
-        readItems();
-        todoAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, todoItems);
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_action_bar_menu, menu);
+        return true;
     }
 
-    public void onAddItem(View view) {
-        ToDo td = new ToDo(etEditText.getText().toString(), new Date(), Priority.LOW);
-        db.createToDo(td);
-//        todoAdapter.add(etEditText.getText().toString());
-        etEditText.setText("");
-//        writeItems();
-        todoAdapter.notifyDataSetChanged();
+    @Override
+    public void onRestart(){
+        super.onRestart();
+        this.finish();
+        this.startActivity(getIntent());
+    }
+
+    public void onAddActionClick(MenuItem item) {
+        Intent intent = new Intent(this, ListItemActivity.class);
+        startActivity(intent);
+    }
+
+    public void populateArrayItems(){
+        readItems();
+        todoAdapter = new ListStoryAdapter(this, R.layout.list_story_view, todoItems);
     }
 
     private void readItems(){
-//        File filesDir = getFilesDir();
-//        File file = new File(filesDir, "todo.txt");
-        Log.e(LOG, "reading items from db");
-        todoItems = new ArrayList<String>();
+        Log.d(LOG, "debug reading items from db");
+        Log.e(LOG, "error reading items from db");
+        Log.i(LOG, "info reading items from db");
+        Log.v(LOG, "verbose reading items from db");
         try {
-            for (ToDo td: db.getAllToDos()){
-                todoItems.add(td.toString());
-            }
+            todoItems = db.getAllToDos();
         } catch (ParseException e) {
             e.printStackTrace();
         }
     }
 
-    private void writeItems(){
-        File filesDir = getFilesDir();
-        File file = new File(filesDir, "todo.txt");
-        try {
-            FileUtils.writeLines(file, todoItems);
-        } catch (IOException e) {
-
-        }
-    }
 }

@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by adil on 12/29/15.
@@ -11,7 +12,7 @@ import java.util.Date;
 public class DateHelper {
 
     // Date formatter
-    private static final DateFormat dateFormatter = new SimpleDateFormat("MM/dd/yyyy");
+    private static final DateFormat dateFormatter = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
 
     public static String getDateAsString(Date date){
         return dateFormatter.format(date);
@@ -20,4 +21,5 @@ public class DateHelper {
     public static Date getStringAsDate(String date) throws ParseException {
         return dateFormatter.parse(date);
     }
+
 }

@@ -5,12 +5,19 @@ import com.adil.meedoo.helpers.DateHelper;
 import java.io.Serializable;
 import java.util.Date;
 
-
 public class ToDo implements Serializable{
     private int id;
     private String text;
     private Date dueDate;
     private Priority priority;
+
+    private static final String DEFAULT_TEXT = "...";
+    private static final Date DEFAULT_DATE = new Date();
+    private static final Priority DEFAULT_PRIORITY = Priority.LOW;
+
+    public ToDo(){
+        this(DEFAULT_TEXT, DEFAULT_DATE, DEFAULT_PRIORITY);
+    }
 
     public ToDo(int id, String text, Date dueDate, Priority priority){
         this.id = id;
@@ -26,11 +33,11 @@ public class ToDo implements Serializable{
     }
 
     public int getId() {
-        return id;
+        return this.id;
     }
 
     public String getText() {
-        return text;
+        return this.text;
     }
 
     public void setText(String text) {
@@ -38,7 +45,7 @@ public class ToDo implements Serializable{
     }
 
     public Date getDueDate() {
-        return dueDate;
+        return this.dueDate;
     }
 
     public void setDueDate(Date dueDate) {
@@ -46,7 +53,7 @@ public class ToDo implements Serializable{
     }
 
     public Priority getPriority() {
-        return priority;
+        return this.priority;
     }
 
     public void setPriority(Priority priority) {

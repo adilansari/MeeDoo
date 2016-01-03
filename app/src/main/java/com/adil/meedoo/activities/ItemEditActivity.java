@@ -1,4 +1,4 @@
-package com.adil.meedoo;
+package com.adil.meedoo.activities;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
@@ -14,7 +14,8 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.adil.meedoo.helpers.DatabaseHelper;
+import com.adil.meedoo.R;
+import com.adil.meedoo.helpers.ToDoItemsDbHelper;
 import com.adil.meedoo.helpers.DateHelper;
 import com.adil.meedoo.models.Priority;
 import com.adil.meedoo.models.ToDo;
@@ -23,15 +24,15 @@ import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 
-public class ListItemActivity extends AppCompatActivity {
+public class ItemEditActivity extends AppCompatActivity {
 
     Spinner prioritySpinner;
+    ArrayAdapter<Priority> listStoryAdapter;
+    EditText toDoEditText;
     EditText dateEditText;
     DatePickerDialog dateDialog;
-    EditText toDoEditText;
-    ArrayAdapter<Priority> listStoryAdapter;
-    DatabaseHelper db;
     ToDo toDoObject;
+    ToDoItemsDbHelper db;
 
 
     @Override
@@ -39,16 +40,13 @@ public class ListItemActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_item);
         findViewsById();
-        db = new DatabaseHelper(getApplicationContext());
-        listStoryAdapter = new ArrayAdapter<Priority>(this, android.R.layout.simple_spinner_item, Priority.values());
-        prioritySpinner.setAdapter(listStoryAdapter);
-        setDateField();
+        db = new ToDoItemsDbHelper(getApplicationContext());
 
         toDoObject = null;
         Intent intent = this.getIntent();
         if (intent.hasExtra(MainActivity.INTENT_EXTRA_OBJECT)){
             toDoObject = (ToDo) intent.getSerializableExtra(MainActivity.INTENT_EXTRA_OBJECT);
-            loadViews(toDoObject);
+            preloadViewData(toDoObject);
         }
     }
 
@@ -59,14 +57,21 @@ public class ListItemActivity extends AppCompatActivity {
     }
 
     private void findViewsById(){
+        listStoryAdapter = new ArrayAdapter<Priority>(this, android.R.layout.simple_spinner_item, Priority.values());
+
         prioritySpinner = (Spinner) findViewById(R.id.prioritySpinner);
+        prioritySpinner.setAdapter(listStoryAdapter);
+
         toDoEditText = (EditText) findViewById(R.id.itemDescription);
+
         dateEditText = (EditText) findViewById(R.id.dateDialog);
         dateEditText.setInputType(InputType.TYPE_NULL);
         dateEditText.requestFocus();
+
+        setDateField();
     }
 
-    private void loadViews(ToDo td){
+    private void preloadViewData(ToDo td){
         toDoEditText.setText(td.getText());
         prioritySpinner.setSelection(listStoryAdapter.getPosition(td.getPriority()));
         dateEditText.setText(DateHelper.getDateAsString(td.getDueDate()));
@@ -94,13 +99,13 @@ public class ListItemActivity extends AppCompatActivity {
         if (toDoObject == null) {
             toDoObject = new ToDo(text, date, priority);
             db.createToDo(toDoObject);
-            Toast.makeText(this, "Saving todo " + toDoObject.toString(), Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Saved", Toast.LENGTH_LONG).show();
         } else {
             toDoObject.setText(text);
             toDoObject.setDueDate(date);
             toDoObject.setPriority(priority);
             db.updateToDo(toDoObject);
-            Toast.makeText(this, "Updating todo " + toDoObject.toString(), Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Updated", Toast.LENGTH_LONG).show();
         }
 
         this.finish();

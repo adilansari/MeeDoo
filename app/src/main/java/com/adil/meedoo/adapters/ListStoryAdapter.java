@@ -1,4 +1,4 @@
-package com.adil.meedoo;
+package com.adil.meedoo.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.adil.meedoo.R;
 import com.adil.meedoo.helpers.DateHelper;
 import com.adil.meedoo.models.ToDo;
 

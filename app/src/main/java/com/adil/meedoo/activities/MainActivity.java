@@ -1,4 +1,4 @@
-package com.adil.meedoo;
+package com.adil.meedoo.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,7 +10,9 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.adil.meedoo.helpers.DatabaseHelper;
+import com.adil.meedoo.R;
+import com.adil.meedoo.adapters.ListStoryAdapter;
+import com.adil.meedoo.helpers.ToDoItemsDbHelper;
 import com.adil.meedoo.models.ToDo;
 
 import java.text.ParseException;
@@ -21,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
     List<ToDo> todoItems;
     ListStoryAdapter todoAdapter;
     ListView lvItems;
-    DatabaseHelper db;
+    ToDoItemsDbHelper db;
 
     public static final String INTENT_EXTRA_OBJECT = "toDoObject";
     private static final String LOG = MainActivity.class.getName();
@@ -30,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        db = new DatabaseHelper(getApplicationContext());
+        db = new ToDoItemsDbHelper(getApplicationContext());
 
         populateArrayItems();
         lvItems = (ListView) findViewById(R.id.list_story_view);
@@ -39,10 +41,9 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.d(LOG, "getting to create new intent.");
                 ToDo td = (ToDo) parent.getAdapter().getItem(position);
-                Intent intent = new Intent(MainActivity.this, ListItemActivity.class);
-                Log.d(LOG, "sending intent to load current activity");
+                Intent intent = new Intent(MainActivity.this, ItemEditActivity.class);
+                Log.d(LOG, "sending intent to load new activity");
                 intent.putExtra(INTENT_EXTRA_OBJECT, td);
                 startActivity(intent);
             }
@@ -65,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onAddActionClick(MenuItem item) {
-        Intent intent = new Intent(this, ListItemActivity.class);
+        Intent intent = new Intent(this, ItemEditActivity.class);
         startActivity(intent);
     }
 
@@ -76,9 +77,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void readItems(){
         Log.d(LOG, "debug reading items from db");
-        Log.e(LOG, "error reading items from db");
-        Log.i(LOG, "info reading items from db");
-        Log.v(LOG, "verbose reading items from db");
         try {
             todoItems = db.getAllToDos();
         } catch (ParseException e) {

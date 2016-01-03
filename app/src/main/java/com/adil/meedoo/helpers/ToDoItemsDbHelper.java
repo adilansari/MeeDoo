@@ -18,10 +18,10 @@ import java.util.List;
 /**
  * Created by adil on 12/29/15.
  */
-public class DatabaseHelper extends SQLiteOpenHelper{
+public class ToDoItemsDbHelper extends SQLiteOpenHelper{
 
     // Logcat tag
-    private static final String LOG = DatabaseHelper.class.getName();
+    private static final String LOG = ToDoItemsDbHelper.class.getName();
 
     // Database Version
     private static final int DATABASE_VERSION = 1;
@@ -44,7 +44,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
             + " TEXT," + KEY_PRIORITY + " INTEGER," + KEY_DUE_DATE
             + " DATETIME" + ")";
 
-    public DatabaseHelper(Context context) {
+    public ToDoItemsDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
@@ -70,7 +70,6 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         values.put(KEY_PRIORITY, todo.getPriority().getPriorityCode());
         values.put(KEY_DUE_DATE, DateHelper.getDateAsString(todo.getDueDate()));
 
-        // insert row
         long todo_id = db.insert(TABLE_TODO, null, values);
 
         return todo_id;
@@ -135,7 +134,6 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         values.put(KEY_PRIORITY, todo.getPriority().getPriorityCode());
         values.put(KEY_DUE_DATE, DateHelper.getDateAsString(todo.getDueDate()));
 
-        // updating row
         return db.update(TABLE_TODO, values, KEY_ID + " = ?",
                 new String[] { String.valueOf(todo.getId()) });
     }
@@ -149,7 +147,6 @@ public class DatabaseHelper extends SQLiteOpenHelper{
                 new String[] { String.valueOf(todo_id) });
     }
 
-    // closing database
     public void closeDB() {
         SQLiteDatabase db = this.getReadableDatabase();
         if (db != null && db.isOpen())

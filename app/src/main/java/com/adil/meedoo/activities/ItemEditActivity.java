@@ -15,8 +15,8 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.adil.meedoo.R;
-import com.adil.meedoo.helpers.ToDoItemsDbHelper;
 import com.adil.meedoo.helpers.DateHelper;
+import com.adil.meedoo.helpers.ToDoItemsDbHelper;
 import com.adil.meedoo.models.Priority;
 import com.adil.meedoo.models.ToDo;
 

@@ -44,6 +44,7 @@ public class ListStoryAdapter extends ArrayAdapter<ToDo> {
             TextView tvDueDate = (TextView) v.findViewById(R.id.due_date);
 
             tvPriority.setText(td.getPriority().toString());
+            tvPriority.setTextColor(td.getPriority().getColor());
             tvItemText.setText(td.getText());
             tvDueDate.setText(DateHelper.getDateAsString(td.getDueDate()));
         }

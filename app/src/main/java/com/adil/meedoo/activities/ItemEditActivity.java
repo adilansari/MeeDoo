@@ -15,8 +15,8 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.adil.meedoo.R;
-import com.adil.meedoo.helpers.ToDoItemsDbHelper;
 import com.adil.meedoo.helpers.DateHelper;
+import com.adil.meedoo.helpers.ToDoItemsDbHelper;
 import com.adil.meedoo.models.Priority;
 import com.adil.meedoo.models.ToDo;
 
@@ -65,6 +65,7 @@ public class ItemEditActivity extends AppCompatActivity {
         toDoEditText = (EditText) findViewById(R.id.itemDescription);
 
         dateEditText = (EditText) findViewById(R.id.dateDialog);
+        dateEditText.setText(DateHelper.getDateAsString(new Date()));
         dateEditText.setInputType(InputType.TYPE_NULL);
         dateEditText.requestFocus();
 

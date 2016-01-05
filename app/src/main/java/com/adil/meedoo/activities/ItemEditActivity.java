@@ -65,6 +65,7 @@ public class ItemEditActivity extends AppCompatActivity {
         toDoEditText = (EditText) findViewById(R.id.itemDescription);
 
         dateEditText = (EditText) findViewById(R.id.dateDialog);
+        dateEditText.setText(DateHelper.getDateAsString(new Date()));
         dateEditText.setInputType(InputType.TYPE_NULL);
         dateEditText.requestFocus();
 
